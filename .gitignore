@@ -1,0 +1,147 @@
+# ============================================================
+# .gitignore — Go Project
+# ============================================================
+
+# ====================
+# Binários e compilados
+# ====================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/bin/
+/dist/
+/build/
+
+# Binário principal do projeto (ajuste para o nome do seu binário)
+# /meu-app
+
+# ====================
+# Go toolchain
+# ====================
+# Cache de módulos local (não commitar vendor se usar Go modules)
+vendor/
+
+# Go workspace
+go.work.sum
+
+# Arquivos de cobertura de testes
+*.coverprofile
+coverage.out
+coverage.html
+
+# Profiling
+*.prof
+*.pprof
+cpu.out
+mem.out
+
+# ====================
+# Ambiente e configurações sensíveis
+# ====================
+.env
+.env.*
+!.env.example
+*.local
+config.local.*
+secrets.*
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# ====================
+# IDEs e editores
+# ====================
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# GoLand / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ====================
+# OS
+# ====================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ====================
+# Docker
+# ====================
+.docker/
+docker-compose.override.yml
+
+# ====================
+# Logs e temporários
+# ====================
+*.log
+logs/
+tmp/
+temp/
+.tmp/
+
+# ====================
+# Banco de dados local
+# ====================
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# ====================
+# Ferramentas de qualidade e CI
+# ====================
+.golangci.yml.local
+report.xml
+test-results/
+
+# ====================
+# Air (live reload)
+# ====================
+.air.toml
+tmp/
+
+# ====================
+# Swagger / OpenAPI gerado
+# ====================
+docs/swagger.json
+docs/swagger.yaml
+docs/docs.go
