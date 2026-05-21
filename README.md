@@ -185,7 +185,7 @@ sql/
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/social-plus.git
+git clone https://github.com/lucaspnbrs/social-plus.git
 cd social-plus
 
 # Copy environment config
@@ -230,8 +230,6 @@ GET    /api/v1/users/:id          # public user profile
 GET    /api/v1/users/:id/posts    # posts by user
 ```
 
-Full Swagger docs available at `/swagger/index.html` when running locally.
-
 ---
 
 ## 🗺️ Roadmap
@@ -263,5 +261,5 @@ Please make sure to update tests accordingly.
 ---
 
 <p align="center">
-  Built with precision by <a href="https://github.com/your-username">Lucas Barros</a> · <strong>JL.Code</strong>
+  Built with precision by <a href="https://github.com/lucaspnbrs">Lucas Barros</a> · <strong>JL.Code</strong>
 </p>
