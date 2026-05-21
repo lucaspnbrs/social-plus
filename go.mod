@@ -8,4 +8,4 @@ require (
 	github.com/lib/pq v1.12.3
 )
 
-require github.com/badoux/checkmail v1.2.4 // indirect
+require github.com/badoux/checkmail v1.2.4
