@@ -62,12 +62,26 @@ social-plus/
 All database interactions are abstracted behind interfaces. Business logic **never** talks directly to PostgreSQL — it talks to a contract.
 
 ```go
-// internal/repository/post_repository.go
-type PostRepository interface {
-    Create(ctx context.Context, post *domain.Post) error
-    FindByID(ctx context.Context, id uuid.UUID) (*domain.Post, error)
-    ListByFilter(ctx context.Context, filter domain.PostFilter) ([]*domain.Post, error)
-    Delete(ctx context.Context, id uuid.UUID) error
+// src/repositories/users
+func (repository users ) Create( user models.User) (uint64, error) {
+	statement, erro := repository.database.Prepare(
+		"QUERY-THAT-USE-IN-YOUR-DB",
+	)
+	
+	if erro != nil {
+		return 0, erro
+	}
+
+	defer statement.Close()
+
+	var lastInserted uint64
+	erro = statement.QueryRow(user.Nome, user.Nick, user.Email, user.Pass).Scan(&lastInserted)
+	if erro != nil {
+		return 0, erro
+	}
+
+	return lastInserted, nil
+
 }
 ```
 
@@ -90,8 +104,8 @@ HTTP Request → Handler (parse) → UseCase (logic) → Repository (data) → R
 No global state. All dependencies are explicit and injected via constructors.
 
 ```go
-func NewPostUseCase(repo repository.PostRepository, logger logger.Logger) *PostUseCase {
-    return &PostUseCase{repo: repo, logger: logger}
+func NewRepositoryFromUsers ( database *sql.DB) *users {
+	return &users{database}
 }
 ```
 
@@ -110,9 +124,11 @@ Go's implicit interface system is used deliberately. Each layer depends only on 
 Cross-cutting concerns (auth, logging, CORS, rate limiting) are composed as middleware — fully decoupled from handlers.
 
 ```go
-router.Use(middleware.RequestLogger())
-router.Use(middleware.RateLimiter())
-router.Use(middleware.Authenticate(tokenService))
+func Generate() *mux.Router {
+	r := mux.NewRouter()
+
+	return routers.Settings(r)
+}
 ```
 
 ---
@@ -132,16 +148,14 @@ domain.Post  ≠  dto.PostRequest  ≠  dto.PostResponse
 All schema changes are tracked as sequential SQL migration files, never modified retroactively.
 
 ```
-migrations/
-├── 000001_create_users.up.sql
-├── 000002_create_posts.up.sql
-├── 000003_create_reactions.up.sql
+sql/
+├── sql.sql
 └── ...
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack | Future techs
 
 | Layer | Technology |
 |---|---|
@@ -164,7 +178,7 @@ migrations/
 ### Prerequisites
 
 - Go 1.22+
-- Docker & Docker Compose
+- Docker & Docker Compose for containers 
 - Make
 
 ### Running locally
