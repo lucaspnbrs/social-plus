@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"social-plus/src/security"
 	"strings"
 	"time"
 
@@ -24,7 +25,7 @@ func (user *User) Prepare(step string) error {
 		return erro
 	}
  
-	user.formate()
+	user.formate(step)
 	return nil
 }
 
@@ -48,8 +49,19 @@ func (user *User) validate(step string) error {
 }
 
 
-func ( user *User) formate() {
+func ( user *User) formate(step string) error {
 	user.Nome = strings.TrimSpace(user.Nome)
 	user.Email = strings.TrimSpace(user.Email)
 	user.Nick = strings.TrimSpace(user.Nick)
+
+	if step == "register" {
+		passWithHash, erro := security.Hash(user.Pass)
+		if erro != nil {
+			return erro
+		}
+
+		user.Pass = string(passWithHash)
+	}
+
+	return nil 
 }
