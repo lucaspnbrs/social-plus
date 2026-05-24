@@ -15,6 +15,8 @@ var (
 
 	//Port API is running
 	Port = 0
+
+	SecretKey []byte
 )
 
 //Initialize Enviroment Variables 
@@ -31,10 +33,12 @@ func LoadSys() {
 	}
 
 	StringConnection = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-    os.Getenv("DB_HOST_LOCAL"),
-    os.Getenv("DB_PORT_LOCAL"),
-    os.Getenv("DB_USER_LOCAL"),
-    os.Getenv("DB_PASSWORD_LOCAL"),
-    os.Getenv("DB_NAME"),
-)
+       os.Getenv("DB_HOST_LOCAL"),
+       os.Getenv("DB_PORT_LOCAL"),
+       os.Getenv("DB_USER_LOCAL"),
+       os.Getenv("DB_PASSWORD_LOCAL"),
+       os.Getenv("DB_NAME"),
+    )
+
+    SecretKey = []byte(os.Getenv("SECRET_KEY"))
 }

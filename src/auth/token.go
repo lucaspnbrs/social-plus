@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"social-plus/src/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -14,5 +15,5 @@ func CreateToken(userID uint64) (string, error){
 	permissions["userID"] = userID
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissions)
 
-	return token.SignedString([]byte("Secret"))
+	return token.SignedString([]byte(config.SecretKey))
 }
