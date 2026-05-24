@@ -30,7 +30,7 @@ var routesUsers = []Router {
 		URI: "/users",
 		Method: http.MethodGet,
 		Function: controllers.FetchUsers,
-		RequestAuthentication: false,
+		RequestAuthentication: true,
 	 },
 	 {
 		URI: "/users/{userID}",

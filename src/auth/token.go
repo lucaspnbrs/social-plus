@@ -1,7 +1,11 @@
 package auth
 
 import (
+	"errors"
+	"fmt"
+	"net/http"
 	"social-plus/src/config"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,4 +20,40 @@ func CreateToken(userID uint64) (string, error){
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissions)
 
 	return token.SignedString([]byte(config.SecretKey))
+}
+
+//Verify if the token is valid!
+func ValidateToken(r *http.Request) error {
+	 tokenString := extractToken(r)
+	 token, erro := jwt.Parse(tokenString, returnKeyWithVerification)
+
+	 if erro != nil {
+		return erro
+	 }
+
+	if _, ok := token.Claims.(jwt.MapClaims); !ok && token.Valid {
+		return nil 
+	}
+
+	return errors.New("Invalid Token")
+	
+}
+
+
+func extractToken(r *http.Request) string {
+	token := r.Header.Get("Authorization")
+
+	if len(strings.Split(token, " ")) == 2 {
+		return strings.Split(token, " ")[1]
+	}
+
+	return ""
+}
+
+func returnKeyWithVerification (token *jwt.Token) (interface {}, error) {
+	if _ , ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		return nil, fmt.Errorf("Unexpected Subscription Method! %v", token.Header["alg"])
+	}
+
+	return config.SecretKey, nil
 }

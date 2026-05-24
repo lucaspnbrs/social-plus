@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -49,7 +48,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, _ := auth.CreateToken(userSaveInDb.ID)
-	fmt.Println(token)
+	token, erro := auth.CreateToken(userSaveInDb.ID)
+	if erro != nil {
+		responses.ERROR(w, http.StatusInternalServerError, erro)
+		return 
+	}
+
 	w.Write([]byte(token))
 }

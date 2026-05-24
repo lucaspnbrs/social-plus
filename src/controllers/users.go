@@ -32,7 +32,7 @@ func FetchUsers( w http.ResponseWriter, r *http.Request) {
 		return 
 	}
 
-	responses.JSON(w, http.StatusOK, users)
+	responses.JSON(w, http.StatusOK,users)
 }
 
 //Fetch Users By ID

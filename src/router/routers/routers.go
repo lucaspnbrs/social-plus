@@ -2,6 +2,7 @@ package routers
 
 import (
 	"net/http"
+	"social-plus/src/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -21,7 +22,12 @@ func Settings( r *mux.Router) *mux.Router {
 	  routes = append(routes, loginRoute)
 
 	  for _, router := range  routes {	
-		r.HandleFunc(router.URI, router.Function).Methods(router.Method)
+		if router.RequestAuthentication {
+			r.HandleFunc(router.URI, 
+				middleware.Logger(middleware.Authenticate(router.Function))).Methods(router.Method)
+		} else {
+			r.HandleFunc(router.URI, middleware.Logger(router.Function)).Methods(router.Method)
+		}
 	  }
 
 	  return r
