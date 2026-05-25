@@ -18,13 +18,13 @@ var routesUsers = []Router {
 		URI: "/users/{userID}",
 		Method: http.MethodPut,
 		Function: controllers.UpUsers,
-		RequestAuthentication: false,
+		RequestAuthentication: true,
 	 },
 	 {
 		URI: "/users/{userID}",
 		Method: http.MethodDelete,
 		Function: controllers.DeleteUsers,
-		RequestAuthentication: false,
+		RequestAuthentication: true,
 	 },
 	 {
 		URI: "/users",
@@ -36,6 +36,6 @@ var routesUsers = []Router {
 		URI: "/users/{userID}",
 		Method: http.MethodGet,
 		Function: controllers.FetchUsersByID,
-		RequestAuthentication: false,
+		RequestAuthentication: true,
 	 },
 }
