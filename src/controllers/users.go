@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"social-plus/src/auth"
@@ -11,7 +13,7 @@ import (
 	"social-plus/src/responses"
 	"strconv"
 	"strings"
-    "fmt"
+
 	"github.com/gorilla/mux"
 )
 
@@ -158,12 +160,20 @@ func UpUsers( w http.ResponseWriter, r *http.Request) {
 //Delete Users
 func DeleteUsers( w http.ResponseWriter, r *http.Request) {
 	parameters := mux.Vars(r)
-
-
 	userID, erro := strconv.ParseUint(parameters["userID"], 10, 64)
-
 	if erro != nil {
 		responses.ERROR(w, http.StatusInternalServerError, erro)
+		return 
+	}
+
+	userIDinToken, erro := auth.ExtractUserWithID(r)
+	if erro != nil {
+		responses.ERROR(w, http.StatusUnauthorized, erro)
+		return
+	}
+
+	if userIDinToken != userID {
+		responses.ERROR(w, http.StatusForbidden, errors.New("It's not possible delete a user that not yours!"))
 		return 
 	}
 
