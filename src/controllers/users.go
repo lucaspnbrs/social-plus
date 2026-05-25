@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"social-plus/src/auth"
 	"social-plus/src/db"
 	"social-plus/src/models"
 	"social-plus/src/repositories"
 	"social-plus/src/responses"
 	"strconv"
 	"strings"
-
+    "fmt"
 	"github.com/gorilla/mux"
 )
 
@@ -101,13 +102,24 @@ func CreateUser( w http.ResponseWriter, r *http.Request) {
 //Updating Users
 func UpUsers( w http.ResponseWriter, r *http.Request) {
 	parameters := mux.Vars(r)
-
 	userID, erro := strconv.ParseUint(parameters["userID"], 10, 64)
-
 	if erro != nil {
 		responses.ERROR(w, http.StatusBadRequest, erro)
 		return 
 	}
+
+	userIDinToken, erro := auth.ExtractUserWithID(r)
+	if erro != nil {
+		responses.ERROR(w, http.StatusUnauthorized, erro)
+		return 
+	}
+
+	if userID != userIDinToken {
+		responses.ERROR(w, http.StatusForbidden, erro)
+		return
+	}
+
+	fmt.Println(userIDinToken)
 
 	bodyRequest, erro := ioutil.ReadAll(r.Body) //it use to read the body of the request
 	if erro != nil {
@@ -136,6 +148,7 @@ func UpUsers( w http.ResponseWriter, r *http.Request) {
 	repository := repositories.NewRepositoryFromUsers(database)
 	if erro = repository.UpdateUser(userID, user); erro != nil {
 		responses.ERROR(w, http.StatusInternalServerError, erro)
+		return
 	}
 
 	responses.JSON(w, http.StatusNoContent, nil)

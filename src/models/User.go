@@ -36,16 +36,23 @@ func (user *User) validate(step string) error {
 	if user.Nick == "" {
 		return errors.New("The nick field is required and cannot be left blank")
 	}
-	if user.Email == "" {
-		return errors.New("The email field is required and cannot be left blank")
+
+	if step == "register" {
+		if user.Email == "" {
+			return errors.New("The email field is required and cannot be left blank")
+		}
+		if user.Pass == "" {
+			return errors.New("The pass field is required and cannot be left blank")
+		}
 	}
-    if erro := checkmail.ValidateFormat(user.Email); erro != nil {
-		return errors.New("The email inserted is invalid!")
+
+	if user.Email != "" {
+		if erro := checkmail.ValidateFormat(user.Email); erro != nil {
+			return errors.New("The email inserted is invalid!")
+		}
 	}
-	if step == "register" && user.Pass == "" {
-		return errors.New("The pass field is required and cannot be left blank")
-	}
-	return nil 
+
+	return nil
 }
 
 
